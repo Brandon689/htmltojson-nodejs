@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to JSON Parser</title>
+</head>
+<body>
+    <h1>HTML to JSON Parser</h1>
+    <form id="parseForm">
+        <textarea id="htmlInput" rows="10" cols="50"></textarea>
+        <br>
+        <button type="submit">Parse HTML</button>
+    </form>
+    <pre id="result"></pre>
+
+    <script>
+        document.getElementById('parseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const htmlContent = document.getElementById('htmlInput').value;
+            try {
+                const response = await fetch('/parse', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ html: htmlContent })
+                });
+                const result = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('result').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
